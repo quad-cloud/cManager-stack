@@ -8,23 +8,25 @@ logging.basicConfig(
     format="%(asctime)s:%(levelno)s:%(message)s"
 
 )
+sname = 'cfsample'
+url = 'https://s3.amazonaws.com/cc-prasanth/cfsample1.json'
 
 client = boto3.client('cloudformation')
 def cf_validation():
-    valuation=client.validate_template(TemplateURL = 'https://s3.amazonaws.com/cc-prasanth/cfsample1.json')
+    valuation=client.validate_template(TemplateURL = url)
     logging.debug("Validation log: ", valuation)
 
 
 def cf_stack_creation():
     response = client.create_stack(
-    StackName = 'cfsample',
-    TemplateURL= 'https://s3.amazonaws.com/cc-prasanth/cfsample1.json',
+    StackName = sname,
+    TemplateURL= url,
     TimeoutInMinutes = 2,
     OnFailure='ROLLBACK',)
     logging.debug("Stack creation Output:", response)
 
 def cf_stack_description():
-    description = client.describe_stacks(StackName='cfsample')
+    description = client.describe_stacks(StackName=sname)
     logging.debug("stack description:", description)
 
 def main():
