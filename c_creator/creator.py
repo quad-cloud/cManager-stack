@@ -14,6 +14,7 @@ def cf_validation():
     valuation=client.validate_template(TemplateURL = 'https://s3.amazonaws.com/cc-prasanth/cfsample1.json')
     logging.debug("Validation log: ", valuation)
 
+
 def cf_stack_creation():
     response = client.create_stack(
     StackName = 'cfsample',
