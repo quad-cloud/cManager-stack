@@ -13,7 +13,6 @@ logging.basicConfig(
 #url = 'https://s3.amazonaws.com/cc-prasanth/cfsample1.json'
 
 client = boto3.client('cloudformation')
-s3_client = boto3.client('s3')
 
 def main():
     cf_validation('https://s3.amazonaws.com/cc-prasanth/cfsample1.json')
@@ -21,7 +20,7 @@ def main():
     cf_stack_description('cfsample')
 
 def cf_validation(url):
-    valuation=client.validate_template(TemplateBody = url)
+    valuation=client.validate_template(TemplateURL = url)
     logging.debug("Validation log: ", valuation)
 
 
