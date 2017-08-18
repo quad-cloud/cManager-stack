@@ -13,11 +13,11 @@
       "MinLength": "1",
       "MaxLength": "64",
       "AllowedPattern" : "[-_ a-zA-Z0-9]*",
-      "Default": {{Key_Name}}
+      "Default": "{{Key_Name}}"
     },
     "WebServerInstanceType" : {
       "Type" : "String",
-      "Default" : {{webinstancetype}},
+      "Default" : "{{webinstancetype}}",
       "AllowedValues": ["t1.micro", "t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "m1.small",
         "m1.medium", "m1.large", "m1.xlarge", "m2.xlarge", "m2.2xlarge", "m2.4xlarge", "m3.medium",
         "m3.large", "m3.xlarge", "m3.2xlarge", "m4.large", "m4.xlarge", "m4.2xlarge", "m4.4xlarge",
@@ -29,7 +29,7 @@
       },
     "AppServerInstanceType" : {
       "Type" : "String",
-      "Default" : {{appinstancetype}},
+      "Default" : "{{appinstancetype}}",
       "AllowedValues": ["t1.micro", "t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "m1.small",
         "m1.medium", "m1.large", "m1.xlarge", "m2.xlarge", "m2.2xlarge", "m2.4xlarge", "m3.medium",
         "m3.large", "m3.xlarge", "m3.2xlarge", "m4.large", "m4.xlarge", "m4.2xlarge", "m4.4xlarge",
@@ -216,7 +216,7 @@
       "Type" : "AWS::EC2::Route",
       "Properties" : {
         "RouteTableId" : { "Ref" : "RouteTablePublic" },
-        "DestinationCidrBlock" : {{publicroutedestination}},
+        "DestinationCidrBlock" : "{{publicroutedestination}}",
         "GatewayId" : { "Ref" : "IGWBase" }
       }
     },
@@ -254,29 +254,29 @@
 				"GroupDescription": "Enable HTTP access via port 80",
         "VpcId" : {"Ref": "VPCBase"},
         "SecurityGroupIngress": [{
-						"IpProtocol": {{webasg_protocol1}},
-						"FromPort": {{webasg_fromport1}},
-						"ToPort": {{webasg_fromport1}},
-						"CidrIp": {{webasg_cidr1}}
+						"IpProtocol": "{{webasg_protocol1}}",
+						"FromPort": "{{webasg_fromport1}}",
+						"ToPort": "{{webasg_fromport1}}",
+						"CidrIp": "{{webasg_cidr1}}"
 					},
 					{
-						"IpProtocol": {{webasg_protocol2}},
-						"FromPort": {{webasg_fromport2}},,
-						"ToPort": {{webasg_fromport2}},
-						"CidrIp": {{webasg_cidr2}}
+						"IpProtocol": "{{webasg_protocol2}}",
+						"FromPort": "{{webasg_fromport2}}",
+						"ToPort": "{{webasg_fromport2}}",
+						"CidrIp": "{{webasg_cidr2}}"
 					}
 				]
 			}
 		},
     "AppServerSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
-      "Properties":
+      "Properties":{
         "GroupDescription": "Enable access from webserver to appserver",
         "VpcId" : {"Ref": "VPCBase"},
         "SecurityGroupIngress": {
-            "IpProtocol": {{appsg_protocol}},
-            "FromPort": {{appsg_fromport}},
-            "ToPort": {{appsg_toport}},
+            "IpProtocol": "{{appsg_protocol}}",
+            "FromPort": "{{appsg_fromport}}",
+            "ToPort": "{{appsg_toport}}",
             "SourceSecurityGroupId": {"Ref": "WebServerSecurityGroup"}
           }
         }
@@ -287,10 +287,10 @@
         "VPCZoneIdentifier" : [{ "Ref" : "PublicNetAZ1" }, {"Ref": "PublicNetAZ2"}],
         "LoadBalancerNames" : [ { "Ref" : "WebServerLoadBalancer" }, {"Ref": "AppServerLoadBalancer"} ],
         "LaunchConfigurationName" : { "Ref" : "WebServerLaunchConfig" },
-        "MinSize" : {{webasgminsize}},
-        "MaxSize" : {{webasgmaxsize}},
-        "Cooldown" : {{webasgcooldown}},
-        "DesiredCapacity" : {{webasgdesired}}
+        "MinSize" : "{{webasgminsize}}",
+        "MaxSize" : "{{webasgmaxsize}}",
+        "Cooldown" : "{{webasgcooldown}}",
+        "DesiredCapacity" : "{{webasgdesired}}"
         }
       },
     "WebServerScaleUpPolicy" : {
@@ -298,8 +298,8 @@
       "Properties" : {
         "AdjustmentType" : "ChangeInCapacity",
         "AutoScalingGroupName" : { "Ref" : "WebServerAutoScalingGroup" },
-        "Cooldown" : {{webasgscaleup_cooldown}},
-        "ScalingAdjustment" : {{webasgscaleup_adjustment}}
+        "Cooldown" : "{{webasgscaleup_cooldown}}",
+        "ScalingAdjustment" : "{{webasgscaleup_adjustment}}"
     }
   },
     "WebServerScaleDownPolicy" : {
@@ -307,8 +307,8 @@
       "Properties" : {
         "AdjustmentType" : "ChangeInCapacity",
         "AutoScalingGroupName" : { "Ref" : "WebServerAutoScalingGroup" },
-        "Cooldown" : {{webasgscaledown_cooldown}},
-        "ScalingAdjustment" : {{webasgscaledown_adjustment}}
+        "Cooldown" : "{{webasgscaledown_cooldown}}",
+        "ScalingAdjustment" : "{{webasgscaledown_adjustment}}"
     }
     },
     "WebServerLaunchConfig" : {
@@ -327,10 +327,10 @@
         "VPCZoneIdentifier" : [{ "Ref" : "PrivateNetAZ1" }, {"Ref": "PrivateNetAZ2"}],
         "LoadBalancerNames" : [ { "Ref" : "AppServerLoadBalancer" } ],
         "LaunchConfigurationName" : { "Ref" : "AppServerLaunchConfig" },
-        "MinSize" : {{appasgminsize}},
-        "MaxSize" : {{appasgmaxsize}},
-        "Cooldown" : {{appasgcooldown}},
-        "DesiredCapacity" : {{appasgdesired}}
+        "MinSize" : "{{appasgminsize}}",
+        "MaxSize" : "{{appasgmaxsize}}",
+        "Cooldown" : "{{appasgcooldown}}",
+        "DesiredCapacity" : "{{appasgdesired}}"
         }
       },
     "AppServerScaleUpPolicy" : {
@@ -338,8 +338,8 @@
       "Properties" : {
         "AdjustmentType" : "ChangeInCapacity",
         "AutoScalingGroupName" : { "Ref" : "AppServerAutoScalingGroup" },
-        "Cooldown" : {{appbasgscaleup_cooldown}},
-        "ScalingAdjustment" : {{appasgscaleup_adjustment}}
+        "Cooldown" : "{{appbasgscaleup_cooldown}}",
+        "ScalingAdjustment" : "{{appasgscaleup_adjustment}}"
     }
     },
     "AppServerScaleDownPolicy" : {
@@ -347,8 +347,8 @@
       "Properties" : {
         "AdjustmentType" : "ChangeInCapacity",
         "AutoScalingGroupName" : { "Ref" : "AppServerAutoScalingGroup" },
-        "Cooldown" : {{appasgscaledown_cooldown}},
-        "ScalingAdjustment" : {{appasgscaledown_adjustment}}
+        "Cooldown" : "{{appasgscaledown_cooldown}}",
+        "ScalingAdjustment" : "{{appasgscaledown_adjustment}}"
     }
     },
     "AppServerLaunchConfig" : {
@@ -368,14 +368,14 @@
           "Scheme": "internet-facing",
           "Subnets" : [ { "Ref" : "PublicNetAZ1" }, {"Ref": "PublicNetAZ2"} ],
     			"Listeners": [{
-    			"LoadBalancerPort": {{webelb_port}},
-    			"InstancePort": {{webelb_instanceport}},
-    			"Protocol": {{webelb_protocol}} }],
+    			"LoadBalancerPort": "{{webelb_port}}",
+    			"InstancePort": "{{webelb_instanceport}}",
+    			"Protocol": "{{webelb_protocol}}" }],
           "HealthCheck": {"Target": "HTTP:80/",
-    					"HealthyThreshold": {{webelb_healthythreshold}},
-    					"UnhealthyThreshold": {{webelb_unhealthythreshold}},
-    					"Interval": {{webelb_interval}},
-    					"Timeout": {{webelb_timeout}}
+    					"HealthyThreshold": "{{webelb_healthythreshold}}",
+    					"UnhealthyThreshold": "{{webelb_unhealthythreshold}}",
+    					"Interval": "{{webelb_interval}}",
+    					"Timeout": "{{webelb_timeout}}"
     				}
     			}
     		},
@@ -385,12 +385,12 @@
         "SecurityGroups" : [ { "Ref" : "AppServerSecurityGroup" } ],
         "Scheme" : "internal",
         "Subnets" : [ { "Ref" : "PrivateNetAZ1" }, {"Ref": "PrivateNetAZ2"} ],
-        "Listeners": [{"LoadBalancerPort": {{appelb_port}}, "InstancePort":{{appelb_instanceport}}, "Protocol": {{appelb_protocol}} }],
+        "Listeners": [{"LoadBalancerPort": "{{appelb_port}}", "InstancePort": "{{appelb_instanceport}}", "Protocol": "{{appelb_protocol}}" }],
         "HealthCheck": {"Target": "HTTP:80/",
-                  "HealthyThreshold": {{appelb_healthythreshold}},
-                  "UnhealthyThreshold": {{appelb_unhealthythreshold}},
-                  "Interval": {{appelb_interval}},
-                  "Timeout": {{appelb_timeout}}
+                  "HealthyThreshold": "{{appelb_healthythreshold}}",
+                  "UnhealthyThreshold": "{{appelb_unhealthythreshold}}",
+                  "Interval": "{{appelb_interval}}",
+                  "Timeout": "{{appelb_timeout}}"
                 }
               }
             }

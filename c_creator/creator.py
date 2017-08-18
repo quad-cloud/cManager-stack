@@ -23,8 +23,8 @@ def main():
     template_file = _template_create("vpc.json", "properties.yaml")
     _s3_upload(template_file, "cc-prasanth", "vpc.json")
     _cf_validation(template_file)
-    cf_stack_creation("cManager_VPC", template_file)
-    _cf_stack_description("cManager_VPC")
+    cf_stack_creation("cManagerVPC", template_file)
+    _cf_stack_description("cManagerVPC")
 
 
 def _template_create(jinja_template, properties_yaml):
@@ -69,7 +69,7 @@ def cf_stack_creation(sname, path):
     response = client.create_stack(
     StackName = sname,
     TemplateBody= path,
-    TimeoutInMinutes = 2,
+    TimeoutInMinutes = 20,
     OnFailure='ROLLBACK',)
     logging.debug("Stack creation Output:", response)
 
