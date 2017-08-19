@@ -1,0 +1,68 @@
+Key_Name: 'ec2-prasanth'
+webinstancetype: 't2.micro'
+appinstancetype: 't2.micro'
+
+#publicroutedestination CIDR
+publicroutedestination: '0.0.0.0/0'
+
+#WebServerSecurityGroup ingress rules
+webasg_protocol1: "tcp"
+webasg_fromport1: "22"
+webasg_toport1: "22"
+webasg_cidr1: "0.0.0.0/0"
+
+webasg_protocol2: "tcp"
+webasg_fromport2: "80"
+webasg_toport2: "80"
+webasg_cidr2: "0.0.0.0/0"
+
+#AppServerSecurityGroup ingress rules
+appsg_protocol: 'tcp'
+appsg_fromport: "0"
+appsg_toport: "65535"
+
+#WebServerAutoScalingGroup
+webasgminsize: '2'
+webasgmaxsize: '4'
+webasgcooldown: '300'
+webasgdesired: '3'
+
+#WebServerScaleUpPolicy
+webasgscaleup_cooldown: '120'
+webasgscaleup_adjustment: '1'
+
+#WebServerScaleDownPolicy
+webasgscaledown_cooldown: '120'
+webasgscaledown_adjustment: '-1'
+
+#AppServerAutoScalingGroup
+appasgminsize: '2'
+appasgmaxsize: '4'
+appasgcooldown: '300'
+appasgdesired: '3'
+
+#AppServerScaleUpPolicy
+appasgscaleup_cooldown: '120'
+appasgscaleup_adjustment: '1'
+
+#AppServerScaleDownPolicy
+appasgscaledown_cooldown: '120'
+appasgscaledown_adjustment: '-1'
+
+#WebServerLoadBalancer
+webelb_port: "80"
+webelb_instanceport: "80"
+webelb_protocol: "HTTP"
+webelb_healthythreshold: '2'
+webelb_unhealthythreshold: '3'
+webelb_interval: "30"
+webelb_timeout: "5"
+
+#AppServerLoadBalancer
+appelb_port: "80"
+appelb_instanceport: "80"
+appelb_protocol: "HTTP"
+appelb_healthythreshold: '2'
+appelb_unhealthythreshold: '3'
+appelb_interval: "30"
+appelb_timeout: "5"
