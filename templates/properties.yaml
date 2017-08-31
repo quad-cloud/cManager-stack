@@ -1,4 +1,4 @@
-Key_Name: 'ec2-prasanth'
+Key_Name: 'quadcloud'
 webinstancetype: 't2.micro'
 appinstancetype: 't2.micro'
 

@@ -13,7 +13,7 @@ logging.basicConfig(
 
 )
 
-
+# quadyster_session = boto3.session.Session(profile_name='quadyster')
 client = boto3.client('cloudformation')
 s3_client = boto3.client("s3")
 
@@ -21,10 +21,10 @@ s3_client = boto3.client("s3")
 def main():
 
     template_file = _template_create("vpc.json", "properties.yaml")
-    _s3_upload(template_file, "cc-prasanth", "vpc.json")
-    _cf_validation(template_file)
-    cf_stack_creation("cManagerVPC", template_file)
-    _cf_stack_description("cManagerVPC")
+    _s3_upload(template_file, "quadyster-webinar", "cManager-VPCIAM.json")
+    # _cf_validation(template_file)
+    # cf_stack_creation("cManagerVPC", template_file)
+    # _cf_stack_description("cManagerVPC")
 
 
 def _template_create(jinja_template, properties_yaml):
@@ -57,11 +57,11 @@ def _get_file_path():
 
 
 def _s3_upload(path, bucket_name, key_name):
-        s3_client.put_object(Body = path, Bucket = bucket_name, Key = key_name)
+        s3_client.put_object(Body=path, Bucket=bucket_name, Key=key_name)
 
 
 def _cf_validation(path):
-    valuation=client.validate_template(TemplateBody = path)
+    valuation = client.validate_template(TemplateBody=path)
     logging.debug("Validation log: ", valuation)
 
 

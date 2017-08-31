@@ -318,7 +318,25 @@
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
                   { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "WebServerInstanceType" }, "Arch" ] } ] },
         "SecurityGroups" : [ { "Ref" : "WebServerSecurityGroup" } ],
-        "InstanceType" : { "Ref" : "WebServerInstanceType" }
+        "InstanceType" : { "Ref" : "WebServerInstanceType" },
+        "IamInstanceProfile": { "Ref": "CodeDeployDemoEC2InstanceProfile" },
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+
+             "yum -y update\n",
+
+             "yum install -y ruby\n",
+
+             "yum update -y aws-cli\n",
+
+             "cd /home/ec2-user\n",
+
+             "aws s3 cp s3://aws-codedeploy-us-east-1/latest/install . --region us-east-1\n",
+
+             "chmod +x ./install\n",
+
+             "./install auto\n", "\n"
+        ]]}}
       }
     },
     "AppServerAutoScalingGroup" : {
@@ -358,7 +376,25 @@
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
                     { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "AppServerInstanceType" }, "Arch" ] } ] },
         "SecurityGroups" : [ { "Ref" : "AppServerSecurityGroup" } ],
-        "InstanceType" : { "Ref" : "AppServerInstanceType" }
+        "InstanceType" : { "Ref" : "AppServerInstanceType" },
+        "IamInstanceProfile": { "Ref": "CodeDeployDemoEC2InstanceProfile" },
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+
+             "yum -y update\n",
+
+             "yum install -y ruby\n",
+
+             "yum update -y aws-cli\n",
+
+             "cd /home/ec2-user\n",
+
+             "aws s3 cp s3://aws-codedeploy-us-east-1/latest/install . --region us-east-1\n",
+
+             "chmod +x ./install\n",
+
+             "./install auto\n", "\n"
+        ]]}}        
       }
     },
     "WebServerLoadBalancer": {
@@ -393,7 +429,52 @@
                   "Timeout": "{{appelb_timeout}}"
                 }
               }
-            }
+          },
+      "CodeDeployEC2Role": {
+         "Type": "AWS::IAM::Role",
+         "Properties": {
+            "AssumeRolePolicyDocument": {
+               "Version" : "2012-10-17",
+               "Statement": [ {
+                  "Effect": "Allow",
+                  "Principal": {
+                     "Service": [ "ec2.amazonaws.com" ]
+                  },
+                  "Action": [ "sts:AssumeRole" ]
+               } ]
+            },
+            "Path": "/"
+         }
+      },
+      "CodeDeployEC2RolePolicies": {
+         "Type": "AWS::IAM::Policy",
+         "Properties": {
+            "PolicyName": "CodeDeployEC2RolePolicy",
+            "PolicyDocument": {
+               "Version" : "2012-10-17",
+               "Statement": [ {
+                  "Effect": "Allow",
+                  "Action": [
+                      "s3:Get*",
+                      "s3:List*"
+                  ],
+                  "Resource": "*"
+               } ]
+            },
+            "Roles": [ {
+               "Ref": "CodeDeployEC2Role"
+            } ]
+         }
+      },
+      "CodeDeployDemoEC2InstanceProfile": {
+         "Type": "AWS::IAM::InstanceProfile",
+         "Properties": {
+            "Path": "/",
+            "Roles": [ {
+               "Ref": "CodeDeployEC2Role"
+            } ]
+         }
+      }
           },
   "Outputs": {
     "VPCID" : { "Value" : { "Ref" : "VPCBase" } },
